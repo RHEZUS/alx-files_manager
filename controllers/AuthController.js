@@ -4,7 +4,6 @@ import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
 
 class AuthController {
-
   /**
    * Should sign-in the user by generating a new authentication token
    * @return an authentication token token: "155342df-2399-41da-9e8c-458b6ac52a0c"
@@ -42,7 +41,7 @@ class AuthController {
   /**
    * Should sign-out the user based on the token
    * @returns an empty response
-   * status code 20 
+   * status code 20
    */
   static async getDisconnect(request, response) {
     const token = request.header('X-Token');

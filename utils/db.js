@@ -1,5 +1,5 @@
 import mongodb from 'mongodb';
-import Collection from 'mongodb/lib/collection';
+// import Collection from 'mongodb/lib/collection';
 
 /**
  * Represents a MongoDB client.
@@ -59,5 +59,5 @@ class DBClient {
   }
 }
 
-export const dbClient = new DBClient();
+const dbClient = new DBClient();
 export default dbClient;

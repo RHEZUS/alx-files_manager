@@ -7,7 +7,6 @@ import redisClient from '../utils/redis';
 const userQueue = new Queue('userQueue', 'redis://127.0.0.1:6379');
 
 class UsersController {
-
   /**
    * Create a new user
    * @returns the new user object or an error

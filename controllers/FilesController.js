@@ -9,7 +9,6 @@ import redisClient from '../utils/redis';
 const fileQueue = new Queue('fileQueue', 'redis://127.0.0.1:6379');
 
 class FilesController {
-
   /**
    * Get the authenticated user
    * @returns a user object or null
@@ -152,7 +151,7 @@ class FilesController {
   }
 
   /**
-   * Should retrieve all users file documents 
+   * Should retrieve all users file documents
    * for a specific parentId and with pagination
    * @returns all user file documents for the given parentId
    */
