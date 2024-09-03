@@ -7,6 +7,7 @@ import redisClient from '../utils/redis';
 const userQueue = new Queue('userQueue', 'redis://127.0.0.1:6379');
 
 class UsersController {
+
   /**
    * Create a new user
    * @returns the new user object or an error
@@ -24,7 +25,7 @@ class UsersController {
       return;
     }
 
-    const users = dbClient.usersCollection;
+    const users = dbClient.db.collection('users');
     users.findOne({ email }, (err, user) => {
       if (user) {
         response.status(400).json({ error: 'Already exist' });
@@ -43,6 +44,7 @@ class UsersController {
     });
   }
 
+
   /**
    * Get the user profile
    * @returns the user profile
@@ -52,7 +54,7 @@ class UsersController {
     const key = `auth_${token}`;
     const userId = await redisClient.get(key);
     if (userId) {
-      const users = dbClient.usersCollection;
+      const users = dbClient.db.collection('users');
       const idObject = new ObjectID(userId);
       users.findOne({ _id: idObject }, (err, user) => {
         if (user) {
@@ -62,6 +64,7 @@ class UsersController {
         }
       });
     } else {
+      console.log('Hupatikani!');
       response.status(401).json({ error: 'Unauthorized' });
     }
   }
