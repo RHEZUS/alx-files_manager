@@ -23,7 +23,7 @@ class AuthController {
     // hash the password
     const hashedPassword = sha1(data[1]);
     // find the user in the database
-    const users = dbClient.db.collection('users');
+    const users = dbClient.usersCollection
     users.findOne({ email: data[0], password: hashedPassword }, async (err, user) => {
       if (user) {
         // generate a token
