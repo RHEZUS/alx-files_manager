@@ -18,7 +18,7 @@ class FilesController {
     const key = `auth_${token}`;
     const userId = await redisClient.get(key);
     if (userId) {
-      const users = dbClient.usersCollection;
+      const users = dbClient.db.collection('users');
       const idObject = new ObjectID(userId);
       const user = await users.findOne({ _id: idObject });
       if (!user) {
@@ -53,7 +53,7 @@ class FilesController {
       return response.status(400).json({ error: 'Missing data' });
     }
 
-    const files = dbClient.filesCollection;
+    const files = dbClient.db.collection('files');
     if (parentId) {
       const idObject = new ObjectID(parentId);
       const file = await files.findOne({ _id: idObject, userId: user._id });
@@ -92,7 +92,7 @@ class FilesController {
         try {
           await fs.mkdir(filePath);
         } catch (error) {
-          // pass. Error raised when file already exists
+        // pass. Error raised when file already exists
         }
         await fs.writeFile(fileName, buff, 'utf-8');
       } catch (error) {
@@ -141,7 +141,7 @@ class FilesController {
       return response.status(401).json({ error: 'Unauthorized' });
     }
     const fileId = request.params.id;
-    const files = dbClient.filesCollection;
+    const files = dbClient.db.collection('files');
     const idObject = new ObjectID(fileId);
     const file = await files.findOne({ _id: idObject, userId: user._id });
     if (!file) {
@@ -213,7 +213,7 @@ class FilesController {
       return response.status(401).json({ error: 'Unauthorized' });
     }
     const { id } = request.params;
-    const files = dbClient.filesCollection;
+    const files = dbClient.db.collection('files');
     const idObject = new ObjectID(id);
     const newValue = { $set: { isPublic: true } };
     const options = { returnOriginal: false };
@@ -236,7 +236,7 @@ class FilesController {
       return response.status(401).json({ error: 'Unauthorized' });
     }
     const { id } = request.params;
-    const files = dbClient.filesCollection;
+    const files = dbClient.db.collection('files');
     const idObject = new ObjectID(id);
     const newValue = { $set: { isPublic: false } };
     const options = { returnOriginal: false };
@@ -255,7 +255,7 @@ class FilesController {
    */
   static async getFile(request, response) {
     const { id } = request.params;
-    const files = dbClient.filesCollection;
+    const files = dbClient.db.collection('files');
     const idObject = new ObjectID(id);
     files.findOne({ _id: idObject }, async (err, file) => {
       if (!file) {

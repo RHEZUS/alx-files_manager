@@ -4,6 +4,7 @@ import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
 
 class AuthController {
+
   /**
    * Should sign-in the user by generating a new authentication token
    * @return an authentication token token: "155342df-2399-41da-9e8c-458b6ac52a0c"
@@ -20,16 +21,12 @@ class AuthController {
       response.status(401).json({ error: 'Unauthorized' });
       return;
     }
-    // hash the password
     const hashedPassword = sha1(data[1]);
-    // find the user in the database
-    const users = dbClient.usersCollection
+    const users = dbClient.db.collection('users');
     users.findOne({ email: data[0], password: hashedPassword }, async (err, user) => {
       if (user) {
-        // generate a token
         const token = uuidv4();
         const key = `auth_${token}`;
-        // store the token in redis for 24 hours
         await redisClient.set(key, user._id.toString(), 60 * 60 * 24);
         response.status(200).json({ token });
       } else {
